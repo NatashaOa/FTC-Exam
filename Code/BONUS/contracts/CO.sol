@@ -1,8 +1,7 @@
 pragma solidity ^0.5.0;
 
-import 'openzeppelin-solidity/contracts/token/ERC20/IERC20.sol';
+import npm init'openzeppelin-solidity/contracts/token/ERC20/IERC20.sol';
 import "../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./CoShoe.sol";
 
 
 contract CO is IERC20, Ownable {
@@ -92,13 +91,13 @@ contract CO is IERC20, Ownable {
 	function transferFrom(address spender, address recipient, uint256 amount) external returns (bool){
 		require(amount <= _balances[spender], "Spend amount must not exceed balance of account");
 		require(amount <= _allowed[spender][msg.spender], "Spend amount cannot exceed allocated spend limit");
-		require(spender != address(0), "Address cannot be used");
+		require(spender != address(0), "Address zero cannot be used");
 
 		_balances[spender] = _balances[spender].sub(amount);
 		_balances[recipient] = _balances[recipient].add(amount);
 		
 		//remove what is spent
-		_allowed[spender][msg.spender] = _allowed[spender][msg.spender].sub(amount); 
+		_allowed[spender][msg.spender] = _allowed[spender][msg.spender] - amount; 
 		emit Transfer(spender, recipient, amount);
 		return true;
    }
